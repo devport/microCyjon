@@ -21,6 +21,14 @@
 ; położenie kodu programu w pamięci fizycznej 0x0000:0x7C00
 [ORG VARIABLE_STAGE1_ADDRESS]
 
+; MAPA PAMIĘCI PO ZAKOŃCZENIU DZIAŁANIA STAGE1:
+; 0x00000 - 0x004FF	1280 B		wektory przerwań
+; 0x00500 - 0x07BFF	29,75 KiB	stos
+; 0x07C00 - 0x07EFF	512 B		program stage1
+; 0x07D00 - 0x07FFF	512 B		wolna przestrzeń
+; 0x08000 - 0x9DFFF	~600 KiB	stage2 + jądro systemu + usługi
+;					w tym miejscu musimy się zmieścić z prawie całym środowiskiem systemu
+
 start:
 	; wyłącz przerwania
 	cli
@@ -101,7 +109,7 @@ start:
 	; pobierz sektor rozruchowy jednej z partycji
 	pop	dword [si + STRUCTURE_STAGE1_PACKET.lba]
 	cmp	dword [si + STRUCTURE_STAGE1_PACKET.lba],	VARIABLE_EMPTY
-	je	.loop	; nie, sprawdź następną partycję
+	je	.loop	; brak partycji, sprawdź następną partycję
 
 	; wczytaj sektor rozruchowy partycji
 	mov	ah,	0x42
