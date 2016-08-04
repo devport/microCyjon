@@ -26,18 +26,46 @@
 ;-------------------------------------------------------------------------------
 
 start:
-	; wyczyść DirectionFlag
+	; wyczyść DirectionFlag, wszystkie liczniki mają "maleć" w pętlach a wskaźniki "rosnąć"
 	cld
 
 	; wyświetl powitanie
 	mov	si,	text_init
 	call	print_16bit
 
+	; wyłącz wszelkie przerwania przychodzące od urządzeń: zegar, klawiatura, dyski, karty sieciowe itp.
+	; i tak nie posiadamy ich obslugi w tym momencie
+	call	disable_pic
+
+	; wyświetl sukces wyłączenia kontrolera PIC
+	mov	si,	text_pic
+	call	print_16bit
+
+	; sprawdź typ procesora
+	; skoro system będzie w pełni 64 bitowy, to przydał by się i 64 bitowy procesor, czyż nie?
+	call	check_cpu
+
+	; wyświetl sukces rozpoznania procesora
+	mov	si,	text_cpu
+	call	print_16bit
+
+	; odblokuj linię A20 (dostęp do pamięci powyżej adresu 0x00100000)
+	; domyślnie powinna być zamknięta
+	; istnieją BIOSy które odblokowują linię automatycznie
+	; ale sprawdźmy dla świętego spokoju
+	call	unlock_a20
+
+	; wyświetl sukces odblokowania dostępu do całej pamięci RAM
+	mov	si,	text_a20
+	call	print_16bit
+
 	; zatrzymaj dalsze wykonywanie kodu
 	jmp	$
 
-; niezbędne procedury do informowania o ewentualnych błędach podczas działania sektora rozruchowego
 %include	"bootloader/library/print_16bit.asm"
+%include	"bootloader/library/disable_pic.asm"
+%include	"bootloader/library/check_cpu.asm"
+%include	"bootloader/library/unlock_a20.asm"
 
 ; wczytaj lokalizacje sektora rozruchowego
 %push

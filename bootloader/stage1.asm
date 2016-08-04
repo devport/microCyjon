@@ -96,10 +96,10 @@ start:
 	; zapewne Omega znajduje się na którejś z partycji, nie wiemy na której...
 
 	; pobierzmy adresy wszystkich 4 partycji z tablicy
-	push	dword [di + STRUCTURE_MBR.table + STRUCTURE_MBR_PARTITION.lba]
-	push	dword [di + STRUCTURE_MBR.table + STRUCTURE_MBR_PARTITION.SIZE + STRUCTURE_MBR_PARTITION.lba]
-	push	dword [di + STRUCTURE_MBR.table + STRUCTURE_MBR_PARTITION.SIZE * 0x02 + STRUCTURE_MBR_PARTITION.lba]
-	push	dword [di + STRUCTURE_MBR.table + STRUCTURE_MBR_PARTITION.SIZE * 0x03 + STRUCTURE_MBR_PARTITION.lba]
+	push	dword [di + STRUCTURE_BOOTSECTOR.table + STRUCTURE_MBR_PARTITION.lba]
+	push	dword [di + STRUCTURE_BOOTSECTOR.table + STRUCTURE_MBR_PARTITION.SIZE + STRUCTURE_MBR_PARTITION.lba]
+	push	dword [di + STRUCTURE_BOOTSECTOR.table + STRUCTURE_MBR_PARTITION.SIZE * 0x02 + STRUCTURE_MBR_PARTITION.lba]
+	push	dword [di + STRUCTURE_BOOTSECTOR.table + STRUCTURE_MBR_PARTITION.SIZE * 0x03 + STRUCTURE_MBR_PARTITION.lba]
 
 .loop:
 	; koniec listy partycji?

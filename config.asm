@@ -98,7 +98,7 @@ struc	STRUCTURE_STAGE1_PACKET
 	.lba		resb	8
 endstruc
 
-struc	STRUCTURE_MBR
+struc	STRUCTURE_BOOTSECTOR
 	.code		resb	440
 	.id		resb	6
 	.table		resb	64	; 4 partycje postawowe
